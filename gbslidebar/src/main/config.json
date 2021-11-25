@@ -1,0 +1,28 @@
+{
+  "app": {
+    "bundleName": "so.orion.slidebar",
+    "vendor": "orion",
+    "version": {
+      "code": 1000000,
+      "name": "1.0.0"
+    },
+    "apiVersion": {
+      "compatible": 4,
+      "target": 5,
+      "releaseType": "Release"
+    }
+  },
+  "deviceConfig": {
+  },
+  "module": {
+    "package": "so.orion.gbslidebar",
+    "deviceType": [
+      "phone","tablet","tv"
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "gbslidebar",
+      "moduleType": "har"
+    }
+  }
+}

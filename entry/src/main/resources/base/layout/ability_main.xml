@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DependentLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    xmlns:app="http://schemas.huawei.com/res-auto"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:orientation="vertical">
+
+    <Text
+        ohos:id="$+id:text_helloworld"
+        ohos:height="match_content"
+        ohos:width="match_content"
+        ohos:background_element="$graphic:background_ability_main"
+        ohos:layout_alignment="horizontal_center"
+        ohos:text="$string:mainability_HelloWorld"
+        ohos:text_size="50px"
+        />
+    <so.orion.gbslidebar.GBSlideBar
+        ohos:id="$+id:gbslidebar"
+        ohos:height="100vp"
+        ohos:width="match_content"
+        ohos:center_in_parent="true"
+        app:gbs_anchor_height="25vp"
+        app:gbs_anchor_width="25vp"
+        app:gbs_background="#e0e0e0"
+        app:gbs_paddingBottom="65vp"
+        app:gbs_placeholder_width="20vp"
+        app:gbs_placeholder_height="20vp"
+        app:gbs_paddingLeft="10vp"
+        app:gbs_paddingRight="10vp"
+        app:gbs_paddingTop="25vp"
+        app:gbs_textSize="14fp"
+        app:gbs_textColor="#666"/>
+
+
+</DependentLayout>
