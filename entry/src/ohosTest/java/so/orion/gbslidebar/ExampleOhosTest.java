@@ -1,4 +1,4 @@
-package so.orion.slidebar;
+package so.orion.gbslidebar;
 
 import ohos.aafwk.ability.delegation.AbilityDelegatorRegistry;
 import org.junit.Test;
@@ -9,6 +9,6 @@ public class ExampleOhosTest {
     @Test
     public void testBundleName() {
         final String actualBundleName = AbilityDelegatorRegistry.getArguments().getTestBundleName();
-        assertEquals("so.orion.slidebar", actualBundleName);
+        assertEquals("so.orion.gbslidebar", actualBundleName);
     }
 }

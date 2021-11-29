@@ -17,8 +17,8 @@ ohos {
 }
 
 dependencies {
+    implementation project(':slidebar')
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
-    implementation project(':gbslidebar')
     testImplementation 'junit:junit:4.13'
     ohosTestImplementation 'com.huawei.ohos.testkit:runner:1.0.0.100'
 }

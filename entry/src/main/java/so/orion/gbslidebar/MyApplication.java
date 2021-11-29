@@ -1,4 +1,4 @@
-package so.orion.slidebar;
+package so.orion.gbslidebar;
 
 import ohos.aafwk.ability.AbilityPackage;
 

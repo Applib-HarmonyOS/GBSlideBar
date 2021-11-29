@@ -1,13 +1,11 @@
-package so.orion.gbslidebar;
+package so.orion.slidebar;
 
 import ohos.agp.animation.Animator;
 import ohos.agp.animation.AnimatorValue;
 import ohos.agp.components.AttrSet;
 import ohos.agp.components.Component;
 import ohos.agp.components.ComponentState;
-import ohos.agp.components.DragEvent;
 import ohos.agp.components.element.Element;
-import ohos.agp.components.element.ElementContainer;
 import ohos.agp.components.element.StateElement;
 import ohos.agp.render.Canvas;
 import ohos.agp.render.Paint;
@@ -16,31 +14,13 @@ import ohos.agp.utils.Rect;
 import ohos.agp.utils.RectFloat;
 import ohos.agp.utils.TextAlignment;
 import ohos.app.Context;
-import ohos.global.resource.solidxml.TypedAttribute;
-import ohos.global.systemres.ResourceTable;
 import ohos.hiviewdfx.HiLog;
 import ohos.hiviewdfx.HiLogLabel;
 import ohos.multimodalinput.event.MmiPoint;
 import ohos.multimodalinput.event.TouchEvent;
-//import android.animation.Animator;
-//import android.animation.AnimatorListenerAdapter;
-//import android.animation.ValueAnimator;
-//import android.content.Context;
-//import android.content.res.TypedArray;
-//import android.graphics.Canvas;
-//import android.graphics.Color;
-//import android.graphics.Paint;
-//import android.graphics.Rect;
-//import android.graphics.RectF;
-//import android.graphics.drawable.Drawable;
-//import android.graphics.drawable.StateListDrawable;
-//import android.util.AttributeSet;
-//import android.view.MotionEvent;
-//import android.view.View;
-//import android.view.animation.LinearInterpolator;
 
 
-public class GBSlideBar extends Component implements Component.DrawTask, Component.TouchEventListener{
+public class GBSlideBar<mIsStartAnimation> extends Component implements Component.DrawTask, Component.TouchEventListener{
 
     private static final HiLogLabel LABEL_LOG = new HiLogLabel(0, 0, "GBSlideBar.class");
     private RectFloat mBackgroundPaddingRect;
@@ -49,7 +29,9 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
     private GBSlideBarAdapter mAdapter;
     private int[][] mAnchor;
     private boolean mModIsHorizontal = true;
-    private int mCurrentX, mCurrentY, mPivotX, mPivotY;
+    private int mCurrentX;
+    private int mPivotX;
+    private int mPivotY;
     private boolean mSlide = false;
 
     private static final int[] STATE_NORMAL = new int[]{ComponentState.COMPONENT_STATE_EMPTY};
@@ -58,25 +40,26 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
     private int[] mState = STATE_SELECTED;
     private int mCurrentItem;
 
-    private int mAnchorWidth, mAnchorHeight;
+    private int mAnchorWidth;
+    private int mAnchorHeight;
 
-    private int mPlaceHolderWidth, mPlaceHolderHeight;
+    private int mPlaceHolderWidth;
+    private int mPlaceHolderHeight;
     private int mTextMargin;
-    private int mType;
 
     private Paint mPaint;
     private int mTextSize;
     private Color mTextColor;
 
     private int mLastX;
-    private int mSlideX, mSlideY;
+    private int mSlideX;
 
     private int mAbsoluteY;
 
-    private int mSelectedX;
-    private boolean mIsStartAnimation = false, mIsEndAnimation = false;
-    private ValueAnimator mStartAnim, mEndAnim;
-    private boolean mIsFirstSelect = true, mCanSelect = true;
+    private boolean mIsStartAnimation = false;
+    private boolean mIsEndAnimation = false;
+    private boolean mIsFirstSelect = true;
+    private boolean mCanSelect = true;
 
     private GBSlideBarListener gbSlideBarListener;
 
@@ -91,8 +74,6 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
 
     private static final String ATTR_GBS_PLACEHOLDER_WIDTH = "gbs_placeholder_width";
     private static final String ATTR_GBS_PLACEHOLDER_HEIGHT = "gbs_placeholder_height";
-
-    private static final String ATTR_GBS_TYPE = "gbs_type";
 
     private static final String ATTR_GBS_BACKGROUND = "gbs_background";
 
@@ -161,13 +142,8 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
             mPlaceHolderHeight = attrSet.getAttr(ATTR_GBS_PLACEHOLDER_HEIGHT).get().getDimensionValue();
         }
 
-        mType=1;
-        if(attrSet.getAttr(ATTR_GBS_TYPE).isPresent()){
-            mType = attrSet.getAttr(ATTR_GBS_TYPE).get().getDimensionValue();
-        }
 
-
-        mBackgroundDrawable =attrSet.getAttr(ATTR_GBS_BACKGROUND).get().getElement(); //a.getDrawable(R.styleable.GBSlideBar_gbs_background);
+        mBackgroundDrawable =attrSet.getAttr(ATTR_GBS_BACKGROUND).get().getElement();
 
         mTextSize=28;
         if(attrSet.getAttr(ATTR_GBS_TEXT_SIZE).isPresent()){
@@ -202,24 +178,24 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
         mAbsoluteY = (int) (mBackgroundPaddingRect.top - mBackgroundPaddingRect.bottom);
 
         mCurrentX = mPivotX = getWidth() / 2;
-        mCurrentY = mPivotY = getHeight() / 2;
+        mPivotY = getHeight() / 2;
 
         int widthBase = rect.getWidth() / getCount();
         int widthHalf = widthBase / 2;
-        int heightBase = rect.getHeight() / getCount();
-        int heightHalf = heightBase / 2;
 
 
         mAnchor = new int[getCount()][2];
+
         for (int i = 0, j = 1; i < getCount(); i++, j++) {
+
             if (i == 0) {
-                mAnchor[i][0] = mModIsHorizontal ? rect.left : mPivotX;
+                mAnchor[i][0] = rect.left;
             } else if (i == getCount() - 1) {
-                mAnchor[i][0] = mModIsHorizontal ? rect.right : mPivotX;
+                mAnchor[i][0] = rect.right;
             } else {
-                mAnchor[i][0] = mModIsHorizontal ? widthBase * j - widthHalf + rect.left : mPivotX;
+                mAnchor[i][0] =widthBase * j - widthHalf + rect.left;
             }
-            mAnchor[i][1] = !mModIsHorizontal ? heightBase * j - heightHalf + rect.top : mPivotY + mAbsoluteY / 2;
+            mAnchor[i][1] = mPivotY + mAbsoluteY / 2;
 
         }
 
@@ -237,14 +213,17 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
         if (mFirstDraw) drawBackground();
         if (mBackgroundDrawable != null) mBackgroundDrawable.drawToCanvas(canvas);
 
-        Element itemDefault, itemSlide;
+        Element itemDefault;
+        Element itemSlide;
         StateElement stateListDrawable;
 
         if (!mSlide) {
             HiLog.debug(LABEL_LOG, "inside not mslide", "");
-            int distance, minIndex = 0, minDistance = Integer.MAX_VALUE;
+            int distance;
+            int minIndex = 0;
+            int minDistance = Integer.MAX_VALUE;
             for (int i = 0; i < getCount(); i++) {
-                distance = Math.abs(mModIsHorizontal ? mAnchor[i][0] - mCurrentX : mAnchor[i][1] - mCurrentY);
+                distance = Math.abs(mAnchor[i][0] - mCurrentX);
                 if (minDistance > distance) {
                     minIndex = i;
                     minDistance = distance;
@@ -260,7 +239,6 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
             HiLog.debug(LABEL_LOG, "INside else", "");
             mSlide = false;
             mCurrentX = mAnchor[mCurrentItem][0];
-            mCurrentY = mAnchor[mCurrentItem][1];
             if (mFirstDraw) {
                 mSlideX = mLastX = mCurrentX;
             }
@@ -313,16 +291,15 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
 
     private void endSlide() {
         HiLog.debug(LABEL_LOG, "endSlide", "");
-        if (mIsEndAnimation == false && mSlide) {
+        if (!mIsEndAnimation && mSlide) {
             mIsEndAnimation = true;
-            mEndAnim = ValueAnimator.ofFloat(0.0f, 1.0f);
+            ValueAnimator mEndAnim = ValueAnimator.ofFloat(0.0f, 1.0f);
             mEndAnim.setDuration(200);
             mEndAnim.setCurveType(Animator.CurveType.LINEAR);
             mEndAnim.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
                 @Override
                 public void onUpdate(AnimatorValue animatorValue, float v) {
                     mSlideX = (int) ((mCurrentX - mLastX) * v+ mLastX);
-                    mSlideY = (int) (mCurrentY * v);
                     invalidate();
                 }
             });
@@ -330,16 +307,19 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
             mEndAnim.setStateChangedListener(new Animator.StateChangedListener() {
                 @Override
                 public void onStart(Animator animator) {
+                    //onstart
 
                 }
 
                 @Override
                 public void onStop(Animator animator) {
+                    //onStop
 
                 }
 
                 @Override
                 public void onCancel(Animator animator) {
+                    //onCancel
 
                 }
 
@@ -354,11 +334,13 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
 
                 @Override
                 public void onPause(Animator animator) {
+                    //onPause
 
                 }
 
                 @Override
                 public void onResume(Animator animator) {
+                    //onResume
 
                 }
             });
@@ -374,19 +356,17 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
 
     private void startSlide() {
         HiLog.debug(LABEL_LOG, "startSlide", "");
-        if (mIsStartAnimation == false && !mSlide && mCanSelect) {
+        if (!mIsStartAnimation && !mSlide && mCanSelect) {
 
             mIsStartAnimation = true;
-            mStartAnim = ValueAnimator.ofFloat(0.0f, 1.0f);
+            ValueAnimator mStartAnim = ValueAnimator.ofFloat(0.0f, 1.0f);
             mStartAnim.setDuration(200);
             HiLog.debug(LABEL_LOG, "animator value + " +Animator.CurveType.LINEAR, "");
             mStartAnim.setCurveType(Animator.CurveType.LINEAR);
-            //mStartAnim.setInterpolator(new LinearInterpolator());
             mStartAnim.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
                 @Override
                 public void onUpdate(AnimatorValue animatorValue, float v) {
                     mSlideX = (int) ((mCurrentX - mLastX) * v + mLastX);
-                    mSlideY = (int) (mCurrentY * v);
 
                     invalidate();
                 }
@@ -394,16 +374,19 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
             mStartAnim.setStateChangedListener(new Animator.StateChangedListener() {
                 @Override
                 public void onStart(Animator animator) {
+                    //onStart
 
                 }
 
                 @Override
                 public void onStop(Animator animator) {
+                    //onStop
 
                 }
 
                 @Override
                 public void onCancel(Animator animator) {
+                    //onCancel
 
                 }
 
@@ -417,11 +400,13 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
 
                 @Override
                 public void onPause(Animator animator) {
+                    //onPause
 
                 }
 
                 @Override
                 public void onResume(Animator animator) {
+                    //onResume
 
                 }
             });
@@ -437,8 +422,7 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
             int index=touchEvent.getIndex();
             MmiPoint point1=touchEvent.getPointerPosition(index);
             //获取当前坐标
-            mCurrentX = mModIsHorizontal ? getNormalizedX(touchEvent,point1) : mPivotX;
-            mCurrentY = !mModIsHorizontal ? (int) point1.getX() : mPivotY;
+            mCurrentX = mModIsHorizontal ? getNormalizedX(point1) : mPivotX;
             mSlide = action == TouchEvent.PRIMARY_POINT_UP;
 
             if (!mSlide && mIsFirstSelect) {
@@ -446,7 +430,7 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
                 startSlide();
                 mIsFirstSelect = false;
 
-            } else if (mIsStartAnimation == false && mIsEndAnimation == false) {
+            } else if (!mIsStartAnimation && !mIsEndAnimation) {
                 endSlide();
             }
 
@@ -455,7 +439,6 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
 
             switch (action) {
                 case TouchEvent.POINT_MOVE:
-//                if (BuildConfig.DEBUG) Log.d(TAG, "Move " + event.getX());
                     return true;
                 case TouchEvent.PRIMARY_POINT_DOWN:
                     return true;
@@ -463,6 +446,8 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
                     mCanSelect = false;
                     invalidate();
                     return true;
+                default:
+                    return false;
             }
         }
         return onTouchEvent(component,touchEvent);
@@ -470,7 +455,7 @@ public class GBSlideBar extends Component implements Component.DrawTask, Compone
 
 
 
-    private int getNormalizedX(TouchEvent event,MmiPoint point1) {
+    private int getNormalizedX(MmiPoint point1) {
         return Math.min(Math.max((int) point1.getX(), mAnchorWidth), getWidth() - mAnchorWidth);
     }
 

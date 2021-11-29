@@ -1,4 +1,4 @@
-package so.orion.gbslidebar;
+package so.orion.slidebar;
 
 import ohos.agp.components.element.StateElement;
 import ohos.agp.utils.Color;

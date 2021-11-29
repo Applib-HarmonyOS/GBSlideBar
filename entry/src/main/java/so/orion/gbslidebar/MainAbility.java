@@ -1,6 +1,6 @@
-package so.orion.slidebar;
+package so.orion.gbslidebar;
 
-import so.orion.slidebar.slice.MainAbilitySlice;
+import so.orion.gbslidebar.slice.MainAbilitySlice;
 import ohos.aafwk.ability.Ability;
 import ohos.aafwk.content.Intent;
 

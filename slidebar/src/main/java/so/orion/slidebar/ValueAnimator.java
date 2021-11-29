@@ -1,5 +1,4 @@
-package so.orion.gbslidebar;
-//package com.ycbjie.slide;
+package so.orion.slidebar;
 
 import ohos.agp.animation.AnimatorValue;
 
@@ -60,6 +59,7 @@ public class ValueAnimator extends AnimatorValue {
      * @param interpolator integer
      */
     public void setInterpolator(int interpolator) {
+        //setInterpolator
     }
 
     /**
@@ -68,8 +68,7 @@ public class ValueAnimator extends AnimatorValue {
      * @return SlidingUpBuilder
      */
     public static ValueAnimator ofFloat() {
-        ValueAnimator myValueAnimator = new ValueAnimator();
-        return myValueAnimator;
+        return new ValueAnimator();
     }
 
     public float getStart() {

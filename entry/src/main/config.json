@@ -14,7 +14,7 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "so.orion.slidebar",
+    "package": "so.orion.gbslidebar",
     "name": ".MyApplication",
     "deviceType": [
       "phone","tablet","tv"
@@ -37,7 +37,7 @@
           }
         ],
         "orientation": "unspecified",
-        "name": "so.orion.slidebar.MainAbility",
+        "name": "so.orion.gbslidebar.MainAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "label": "$string:app_name",
