@@ -5,19 +5,22 @@ import ohos.agp.components.element.ElementScatter;
 import ohos.agp.components.element.StateElement;
 import ohos.agp.utils.Color;
 import ohos.app.Context;
-import ohos.global.resource.*;
-import ohos.hiviewdfx.HiLogLabel;
+import ohos.global.resource.ResourceManager;
 import so.orion.slidebar.GBSlideBarAdapter;
 
+/**
+ * SlideAdapter.
+ * For setting element and contents
+ */
 public class SlideAdapter implements GBSlideBarAdapter {
     protected StateElement[] mItems;
-    protected String[] content = new String[]{"Tag","More","Reject"};
+    protected String[] content = new String[]{"Tag", "More", "Reject"};
     protected Color[] textColor;
 
     public SlideAdapter(Context context, ResourceManager resourceManager, int[] items)  {
         int size = items.length;
-        mItems=new StateElement[size];
-        Element drawable=null;
+        mItems = new StateElement[size];
+        Element drawable = null;
         for (int i = 0; i < size; i++) {
             drawable = ElementScatter.getInstance(context).parse(items[i]);
 
@@ -49,7 +52,8 @@ public class SlideAdapter implements GBSlideBarAdapter {
     public Color getTextColor(int position) {
         return textColor[position];
     }
-    public void setTextColor(Color[] color){
+
+    public void setTextColor(Color[] color) {
         textColor = color;
     }
 }

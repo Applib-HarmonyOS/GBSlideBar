@@ -19,8 +19,14 @@ import ohos.hiviewdfx.HiLogLabel;
 import ohos.multimodalinput.event.MmiPoint;
 import ohos.multimodalinput.event.TouchEvent;
 
+/**
+ * GBSlideBar.
+ *
+ * @param <mIsStartAnimation> -bool
+ *
+ */
 
-public class GBSlideBar<mIsStartAnimation> extends Component implements Component.DrawTask, Component.TouchEventListener{
+public class GBSlideBar<mIsStartAnimation> extends Component implements Component.DrawTask, Component.TouchEventListener {
 
     private static final HiLogLabel LABEL_LOG = new HiLogLabel(0, 0, "GBSlideBar.class");
     private RectFloat mBackgroundPaddingRect;
@@ -102,66 +108,69 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
         super(context, attrSet, resId);
         initAttrSet(attrSet);
     }
+
     private void initAttrSet(AttrSet attrSet) {
 
-        if (attrSet == null) return;
+        if (attrSet == null) {
+            return;
+        }
         mBackgroundPaddingRect = new RectFloat();
-        mBackgroundPaddingRect.left=0;
-        mBackgroundPaddingRect.top=0;
-        mBackgroundPaddingRect.right=0;
-        mBackgroundPaddingRect.bottom=0;
-        mAnchorWidth=50;
-        mAnchorHeight=50;
-        mPlaceHolderWidth=20;
-        mPlaceHolderHeight=20;
+        mBackgroundPaddingRect.left = 0;
+        mBackgroundPaddingRect.top = 0;
+        mBackgroundPaddingRect.right = 0;
+        mBackgroundPaddingRect.bottom = 0;
+        mAnchorWidth = 50;
+        mAnchorHeight = 50;
+        mPlaceHolderWidth = 20;
+        mPlaceHolderHeight = 20;
 
-        if(attrSet.getAttr(ATTR_GBS_PADDING_LEFT).isPresent()){
-            mBackgroundPaddingRect.left =attrSet.getAttr(ATTR_GBS_PADDING_LEFT).get().getDimensionValue();
+        if (attrSet.getAttr(ATTR_GBS_PADDING_LEFT).isPresent()) {
+            mBackgroundPaddingRect.left = attrSet.getAttr(ATTR_GBS_PADDING_LEFT).get().getDimensionValue();
         }
-        if(attrSet.getAttr(ATTR_GBS_PADDING_TOP).isPresent()){
-            mBackgroundPaddingRect.top =attrSet.getAttr(ATTR_GBS_PADDING_TOP).get().getDimensionValue();
+        if (attrSet.getAttr(ATTR_GBS_PADDING_TOP).isPresent()) {
+            mBackgroundPaddingRect.top = attrSet.getAttr(ATTR_GBS_PADDING_TOP).get().getDimensionValue();
         }
-        if(attrSet.getAttr(ATTR_GBS_PADDING_RIGHT).isPresent()){
-            mBackgroundPaddingRect.right =attrSet.getAttr(ATTR_GBS_PADDING_RIGHT).get().getDimensionValue();
+        if (attrSet.getAttr(ATTR_GBS_PADDING_RIGHT).isPresent()) {
+            mBackgroundPaddingRect.right = attrSet.getAttr(ATTR_GBS_PADDING_RIGHT).get().getDimensionValue();
         }
-        if(attrSet.getAttr(ATTR_GBS_PADDING_BOTTOM).isPresent()){
-            mBackgroundPaddingRect.bottom =attrSet.getAttr(ATTR_GBS_PADDING_BOTTOM).get().getDimensionValue();
+        if (attrSet.getAttr(ATTR_GBS_PADDING_BOTTOM).isPresent()) {
+            mBackgroundPaddingRect.bottom = attrSet.getAttr(ATTR_GBS_PADDING_BOTTOM).get().getDimensionValue();
         }
 
-        if(attrSet.getAttr(ATTR_GBS_ANCHOR_WIDTH).isPresent()){
+        if (attrSet.getAttr(ATTR_GBS_ANCHOR_WIDTH).isPresent()) {
             mAnchorWidth = attrSet.getAttr(ATTR_GBS_ANCHOR_WIDTH).get().getDimensionValue();
         }
-        if(attrSet.getAttr(ATTR_GBS_ANCHOR_HEIGHT).isPresent()){
+        if (attrSet.getAttr(ATTR_GBS_ANCHOR_HEIGHT).isPresent()) {
             mAnchorHeight = attrSet.getAttr(ATTR_GBS_ANCHOR_HEIGHT).get().getDimensionValue();
         }
 
-        if(attrSet.getAttr(ATTR_GBS_PLACEHOLDER_WIDTH).isPresent()){
+        if (attrSet.getAttr(ATTR_GBS_PLACEHOLDER_WIDTH).isPresent()) {
             mPlaceHolderWidth = attrSet.getAttr(ATTR_GBS_PLACEHOLDER_WIDTH).get().getDimensionValue();
         }
-        if(attrSet.getAttr(ATTR_GBS_PLACEHOLDER_HEIGHT).isPresent()){
+        if (attrSet.getAttr(ATTR_GBS_PLACEHOLDER_HEIGHT).isPresent()) {
             mPlaceHolderHeight = attrSet.getAttr(ATTR_GBS_PLACEHOLDER_HEIGHT).get().getDimensionValue();
         }
 
 
-        mBackgroundDrawable =attrSet.getAttr(ATTR_GBS_BACKGROUND).get().getElement();
+        mBackgroundDrawable = attrSet.getAttr(ATTR_GBS_BACKGROUND).get().getElement();
 
-        mTextSize=28;
-        if(attrSet.getAttr(ATTR_GBS_TEXT_SIZE).isPresent()){
+        mTextSize = 28;
+        if (attrSet.getAttr(ATTR_GBS_TEXT_SIZE).isPresent()) {
             mTextSize = attrSet.getAttr(ATTR_GBS_TEXT_SIZE).get().getDimensionValue();
         }
-        mTextColor= Color.BLACK;
-        if(attrSet.getAttr(ATTR_GBS_TEXT_COLOR).isPresent()){
-            mTextColor =attrSet.getAttr(ATTR_GBS_TEXT_COLOR).get().getColorValue();
+        mTextColor = Color.BLACK;
+        if (attrSet.getAttr(ATTR_GBS_TEXT_COLOR).isPresent()) {
+            mTextColor = attrSet.getAttr(ATTR_GBS_TEXT_COLOR).get().getColorValue();
         }
-        mTextMargin=0;
-        if(attrSet.getAttr(ATTR_GBS_TEXT_MARGIN).isPresent()){
-            mTextMargin =attrSet.getAttr(ATTR_GBS_TEXT_MARGIN).get().getDimensionValue();
+        mTextMargin = 0;
+        if (attrSet.getAttr(ATTR_GBS_TEXT_MARGIN).isPresent()) {
+            mTextMargin = attrSet.getAttr(ATTR_GBS_TEXT_MARGIN).get().getDimensionValue();
         }
         HiLog.debug(LABEL_LOG, "Attr end", "");
         setTouchEventListener(this::onTouchEvent);
     }
 
-    public void registerDrawTask(){
+    public void registerDrawTask() {
         HiLog.debug(LABEL_LOG, "Reg OnDraw", "");
         addDrawTask(this::onDraw);
     }
@@ -193,7 +202,7 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
             } else if (i == getCount() - 1) {
                 mAnchor[i][0] = rect.right;
             } else {
-                mAnchor[i][0] =widthBase * j - widthHalf + rect.left;
+                mAnchor[i][0] = widthBase * j - widthHalf + rect.left;
             }
             mAnchor[i][1] = mPivotY + mAbsoluteY / 2;
 
@@ -210,8 +219,12 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
     @Override
     public void onDraw(Component component, Canvas canvas) {
         HiLog.debug(LABEL_LOG, "onDraw", "");
-        if (mFirstDraw) drawBackground();
-        if (mBackgroundDrawable != null) mBackgroundDrawable.drawToCanvas(canvas);
+        if (mFirstDraw) {
+            drawBackground();
+        }
+        if (mBackgroundDrawable != null) {
+            mBackgroundDrawable.drawToCanvas(canvas);
+        }
 
         Element itemDefault;
         Element itemSlide;
@@ -232,10 +245,7 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
 
             setCurrentItem(minIndex);
             stateListDrawable = mAdapter.getItem(minIndex);
-
-
-        }
-        else {
+        } else {
             HiLog.debug(LABEL_LOG, "INside else", "");
             mSlide = false;
             mCurrentX = mAnchor[mCurrentItem][0];
@@ -248,19 +258,19 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
 
         }
         int selectedIndex = stateListDrawable.findStateElementIndex(mState);
-        HiLog.debug(LABEL_LOG, "Selected Index"+selectedIndex, "");
+        HiLog.debug(LABEL_LOG, "Selected Index" + selectedIndex, "");
         itemDefault = stateListDrawable.getStateElement(selectedIndex);
 
 
         for (int i = 0; i < getCount(); i++) {
-
+            float yval = mAnchor[i][1] + mAnchorHeight * 3f / 2 + mTextMargin;
             if (i == mCurrentItem) {
                 mPaint.setColor(mAdapter.getTextColor(mCurrentItem));
                 mPaint.setColor(mAdapter.getTextColor(mCurrentItem));
-                canvas.drawText(mPaint, mAdapter.getText(i), mAnchor[i][0], mAnchor[i][1] + mAnchorHeight * 3 / 2 + mTextMargin);
-            }else {
+                canvas.drawText(mPaint, mAdapter.getText(i), mAnchor[i][0], yval);
+            } else {
                 mPaint.setColor(mTextColor);
-                canvas.drawText(mPaint, mAdapter.getText(i), mAnchor[i][0], mAnchor[i][1] + mAnchorHeight * 3 / 2 + mTextMargin);
+                canvas.drawText(mPaint, mAdapter.getText(i), mAnchor[i][0], yval);
             }
             stateListDrawable = mAdapter.getItem(i);
 
@@ -293,18 +303,18 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
         HiLog.debug(LABEL_LOG, "endSlide", "");
         if (!mIsEndAnimation && mSlide) {
             mIsEndAnimation = true;
-            ValueAnimator mEndAnim = ValueAnimator.ofFloat(0.0f, 1.0f);
-            mEndAnim.setDuration(200);
-            mEndAnim.setCurveType(Animator.CurveType.LINEAR);
-            mEndAnim.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
+            ValueAnimator mendanim = ValueAnimator.ofFloat(0.0f, 1.0f);
+            mendanim.setDuration(200);
+            mendanim.setCurveType(Animator.CurveType.LINEAR);
+            mendanim.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
                 @Override
                 public void onUpdate(AnimatorValue animatorValue, float v) {
-                    mSlideX = (int) ((mCurrentX - mLastX) * v+ mLastX);
+                    mSlideX = (int) ((mCurrentX - mLastX) * v + mLastX);
                     invalidate();
                 }
             });
 
-            mEndAnim.setStateChangedListener(new Animator.StateChangedListener() {
+            mendanim.setStateChangedListener(new Animator.StateChangedListener() {
                 @Override
                 public void onStart(Animator animator) {
                     //onstart
@@ -345,7 +355,7 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
                 }
             });
 
-            mEndAnim.start();
+            mendanim.start();
         } else {
 
             mLastX = mCurrentX;
@@ -359,11 +369,11 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
         if (!mIsStartAnimation && !mSlide && mCanSelect) {
 
             mIsStartAnimation = true;
-            ValueAnimator mStartAnim = ValueAnimator.ofFloat(0.0f, 1.0f);
-            mStartAnim.setDuration(200);
-            HiLog.debug(LABEL_LOG, "animator value + " +Animator.CurveType.LINEAR, "");
-            mStartAnim.setCurveType(Animator.CurveType.LINEAR);
-            mStartAnim.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
+            ValueAnimator mstartanim = ValueAnimator.ofFloat(0.0f, 1.0f);
+            mstartanim.setDuration(200);
+            HiLog.debug(LABEL_LOG, "animator value + " + Animator.CurveType.LINEAR, "");
+            mstartanim.setCurveType(Animator.CurveType.LINEAR);
+            mstartanim.setValueUpdateListener(new AnimatorValue.ValueUpdateListener() {
                 @Override
                 public void onUpdate(AnimatorValue animatorValue, float v) {
                     mSlideX = (int) ((mCurrentX - mLastX) * v + mLastX);
@@ -371,7 +381,7 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
                     invalidate();
                 }
             });
-            mStartAnim.setStateChangedListener(new Animator.StateChangedListener() {
+            mstartanim.setStateChangedListener(new Animator.StateChangedListener() {
                 @Override
                 public void onStart(Animator animator) {
                     //onStart
@@ -410,7 +420,7 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
 
                 }
             });
-            mStartAnim.start();
+            mstartanim.start();
         }
     }
 
@@ -419,9 +429,8 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
         HiLog.debug(LABEL_LOG, "onTouchEvent", "");
         if (mCanSelect) {
             int action = touchEvent.getAction();
-            int index=touchEvent.getIndex();
-            MmiPoint point1=touchEvent.getPointerPosition(index);
-            //获取当前坐标
+            int index = touchEvent.getIndex();
+            MmiPoint point1 = touchEvent.getPointerPosition(index);
             mCurrentX = mModIsHorizontal ? getNormalizedX(point1) : mPivotX;
             mSlide = action == TouchEvent.PRIMARY_POINT_UP;
 
@@ -434,9 +443,11 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
                 endSlide();
             }
 
-
-            mState = action == TouchEvent.PRIMARY_POINT_UP || action == TouchEvent.CANCEL ? STATE_SELECTED : STATE_PRESS;
-
+            if (action == TouchEvent.PRIMARY_POINT_UP || action == TouchEvent.CANCEL) {
+                mState = STATE_SELECTED;
+            } else {
+                mState = STATE_PRESS;
+            }
             switch (action) {
                 case TouchEvent.POINT_MOVE:
                     return true;
@@ -450,7 +461,7 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
                     return false;
             }
         }
-        return onTouchEvent(component,touchEvent);
+        return onTouchEvent(component, touchEvent);
     }
 
 
@@ -466,7 +477,7 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
 
 
     private int getCount() {
-        return  mAdapter.getCount() ;
+        return  mAdapter.getCount();
     }
 
 
@@ -476,11 +487,18 @@ public class GBSlideBar<mIsStartAnimation> extends Component implements Componen
         }
         mCurrentItem = currentItem;
     }
+
     public void setAdapter(GBSlideBarAdapter adapter) {
-        HiLog.debug(LABEL_LOG, "fazil setAdapter called"+adapter, "");
+        HiLog.debug(LABEL_LOG, "fazil setAdapter called" + adapter, "");
         mAdapter = adapter;
     }
 
+    /**
+     * setPosition.
+     *
+     * @param position - int
+     *
+     */
     public void setPosition(int position) {
         position = position < 0 ? 0 : position;
         position = position > mAdapter.getCount() ? mAdapter.getCount() - 1 : position;

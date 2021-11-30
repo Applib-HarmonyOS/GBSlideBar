@@ -12,7 +12,7 @@ public class ValueAnimator extends AnimatorValue {
     }
 
     /**
-     * * ValueAnimator
+     * * ValueAnimator.
      *
      * @param start float
      * @param end   float
@@ -23,6 +23,15 @@ public class ValueAnimator extends AnimatorValue {
         myValueAnimator.start = start;
         myValueAnimator.end = end;
         return myValueAnimator;
+    }
+
+    /**
+     * * ofFloat
+     *
+     * @return SlidingUpBuilder
+     */
+    public static ValueAnimator ofFloat() {
+        return new ValueAnimator();
     }
 
     private ValueUpdateListener valueUpdateListener = new ValueUpdateListener() {
@@ -36,6 +45,14 @@ public class ValueAnimator extends AnimatorValue {
         }
     };
 
+    @Override
+    public void setValueUpdateListener(ValueUpdateListener listener) {
+        this.myValueUpdateListener = listener;
+        super.setValueUpdateListener(valueUpdateListener);
+    }
+
+
+
     /**
      * * Constructor
      *
@@ -47,12 +64,6 @@ public class ValueAnimator extends AnimatorValue {
         this.end = endValue;
     }
 
-    @Override
-    public void setValueUpdateListener(ValueUpdateListener listener) {
-        this.myValueUpdateListener = listener;
-        super.setValueUpdateListener(valueUpdateListener);
-    }
-
     /**
      * * setFloatValues
      *
@@ -60,15 +71,6 @@ public class ValueAnimator extends AnimatorValue {
      */
     public void setInterpolator(int interpolator) {
         //setInterpolator
-    }
-
-    /**
-     * * ofFloat
-     *
-     * @return SlidingUpBuilder
-     */
-    public static ValueAnimator ofFloat() {
-        return new ValueAnimator();
     }
 
     public float getStart() {
