@@ -41,7 +41,7 @@ dependencies {
 Usage
 -----
 
-I). Declare Custom GBSlideBar in XML (see xml attributes below for customization):
+I) Declare Custom GBSlideBar in XML (see xml attributes below for customization):
 
         <so.orion.slidebar.GBSlideBar
             ohos:id="$+id:gbslidebar"
@@ -61,7 +61,7 @@ I). Declare Custom GBSlideBar in XML (see xml attributes below for customization
             app:gbs_textColor="#666"/>
 
 
-II). Usage in java 
+II) Usage in java 
 
         GBSlideBar gbSlideBar;
         SlideAdapter mAdapter;
