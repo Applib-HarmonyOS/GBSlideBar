@@ -1,77 +1,90 @@
-# GBSlideBar 滑动选择控件
-[项目不再维护,有需要的可自行根据需求对源码进行修改]
-类似uber的滑动选择工具条
+GBSlideBar
+=================
 
-# 效果图
+Introduction
+------------
+HMOS library which handles custom animation for sliding selection toolbar
+
+Source
+------------
+
+The code in this repository was inspired from [edanel/GBSlideBar](https://github.com/edanel/GBSlideBar). We are very
+ thankful to edanel.
+
+Demo
+------------
 
 ![animation](https://raw.githubusercontent.com/edanel/GBSlideBar/master/screenshot/preview-480.gif)
 
-# 使用
+Installation
+------------
 
-```xml
+In order to use the library, add the following line to your **root** gradle file:
 
-	<so.orion.slidebar.GBSlideBar
-        android:id="@+id/gbslidebar"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        app:gbs_anchor_height="25dp"
-        app:gbs_anchor_width="25dp"
-        app:gbs_background="#e0e0e0"
-        app:gbs_paddingBottom="65dp"
-        app:gbs_placeholder_width="20dp"
-        app:gbs_placeholder_height="20dp"
-        app:gbs_paddingLeft="10dp"
-        app:gbs_paddingRight="10dp"
-        app:gbs_paddingTop="25dp"
-        app:gbs_textSize="14sp"
-        app:gbs_textColor="#666" />
-        
+I) For using GBSlideBar module in sample app, include the source code and add the below
+ dependencies in entry/build.gradle to generate hap/support.har.
+```
+dependencies {
+        implementation project(':slidebar')
+        implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
+        testImplementation 'junit:junit:4.13'
+}
+```
+II) For using GBSlideBar in separate application using har file, add the har file in the entry/libs folder and add the dependencies in entry/build.gradle file.
+```
+dependencies {
+        implementation fileTree(dir: 'libs', include: ['*.har'])
+        testImplementation 'junit:junit:4.12'
+}
 ```
 
-```java
-	private GBSlideBar gbSlideBar;
-    private SlideAdapter mAdapter;
-       gbSlideBar = (GBSlideBar) findViewById(R.id.gbslidebar);
+Usage
+-----
 
-        Resources resources = getResources();
-        mAdapter = new SlideAdapter(resources, new int[]{
-                R.drawable.btn_tag_selector,
-                R.drawable.btn_more_selector,
-                R.drawable.btn_reject_selector});
-                
-        mAdapter.setTextColor(new int[]{
+I) Declare Custom GBSlideBar in XML (see xml attributes below for customization):
+
+        <so.orion.slidebar.GBSlideBar
+            ohos:id="$+id:gbslidebar"
+            ohos:height="100vp"
+            ohos:width="match_content"
+            ohos:center_in_parent="true"
+            app:gbs_anchor_height="25vp"
+            app:gbs_anchor_width="25vp"
+            app:gbs_background="#e0e0e0"
+            app:gbs_paddingBottom="65vp"
+            app:gbs_placeholder_width="20vp"
+            app:gbs_placeholder_height="20vp"
+            app:gbs_paddingLeft="10vp"
+            app:gbs_paddingRight="10vp"
+            app:gbs_paddingTop="25vp"
+            app:gbs_textSize="14fp"
+            app:gbs_textColor="#666"/>
+
+
+II) Usage in java 
+
+        GBSlideBar gbSlideBar;
+        SlideAdapter mAdapter;
+        
+        gbSlideBar= (GBSlideBar) findComponentById(ResourceTable.Id_gbslidebar);
+        ResourceManager resourceManager=this.getResourceManager();
+        
+        mAdapter = new SlideAdapter(MainAbilitySlice.this,resourceManager , new int[]{
+                ResourceTable.Graphic_btn_tag_selector,
+                ResourceTable.Graphic_btn_more_selector,
+                ResourceTable.Graphic_btn_reject_selector
+        });
+        mAdapter.setTextColor(new Color[]{
                 Color.GREEN,
                 Color.BLUE,
                 Color.RED
         });
         
+        gbSlideBar.registerDrawTask();
         gbSlideBar.setAdapter(mAdapter);
         gbSlideBar.setPosition(2);
-        gbSlideBar.setOnGbSlideBarListener(new GBSlideBarListener() {
-            @Override
-            public void onPositionSelected(int position) {
-                Log.d("edanelx","selected "+position);
-            }
+        gbSlideBar.setOnGbSlideBarListener(position -> {
+            HiLog.debug(LABEL_LOG, "position selected", "");
         });
-```
+        
 
-# 引用
-
-```
-	allprojects {
-		repositories {
-			...
-			maven { url "https://jitpack.io" }
-		}
-	}
-```
-```
-	dependencies {
-	        compile 'com.github.edanel:GBSlideBar:0.5'
-	}
-```
-
-# 其他
-
-参考：[android-phased-seek-bar](https://github.com/ademar111190/android-phased-seek-bar)
