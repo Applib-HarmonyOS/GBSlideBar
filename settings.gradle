@@ -1,1 +1,1 @@
-include ':app', ':slidebar'
+include ':entry', ':slidebar'
