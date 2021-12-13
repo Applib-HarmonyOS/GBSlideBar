@@ -4,9 +4,11 @@ apply plugin: 'checkstyle'
 apply plugin: 'org.sonarqube'
 
 ohos {
-    compileSdkVersion 5
+
+    compileSdkVersion 6
     defaultConfig {
-        compatibleSdkVersion 4
+        compatibleSdkVersion 5
+
     }
 }
 
